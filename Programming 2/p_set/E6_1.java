@@ -25,6 +25,7 @@ public class E6_1 {
 		// part B
 		System.out.println("Part B: ");
 
+		sum = 0;
 		for (int i = 1; Math.pow(i, 2) <= 100; i++) {
 			sum += (int) Math.pow(i, 2);
 		}
@@ -34,7 +35,7 @@ public class E6_1 {
 		System.out.println("Part C: ");
 
 		for (int i = 0; i <= 20; i++) {
-			System.out.println((int) Math.pow(2, i));
+			System.out.print((int) Math.pow(2, i) + " ");
 		}
 		System.out.println("\n");
 

@@ -11,7 +11,6 @@ public class SavingsAccountTester {
 	public static void main(String[] args) {
 
 		SavingsAccount cooper = new SavingsAccount(1000, 0.1); // constructs
-																// account
 		cooper.addInterest(); // adds interest
 		System.out.println(cooper.balance); // prints new balance
 		System.out.println("Expected Result: 1100"); // prints expected balance
