@@ -1,22 +1,29 @@
-// change instnce variables to Private
+//*******************************
+//
+// Combo Lock class
+// written by Cooper Bates (cbb2153)
+//
+// class addressing Programming Project 8.1 of BigJava
+//
+//*******************************
 
 public class ComboLock {
 
-	public int position = 0;
-	public int secret1;
-	public int secret2;
-	public int secret3;
-	public boolean pin1;
-	public boolean pin2 = false;
-	public boolean pin3 = false;
+	private int position;
+	private int secret1;
+	private int secret2;
+	private int secret3;
+	private boolean pin1;
+	private boolean pin2;
+	private boolean pin3;
 
-	private int UPPER_LIMIT = 39;
-	private int LOWER_LIMIT = 0;
-	private int RANGE = 40;
+	private final int UPPER_LIMIT = 39;
+	private final int LOWER_LIMIT = 0;
+	private final int RANGE = 40;
 
 	// initializes combo lock
 	public ComboLock() {
-
+		this.reset();
 	}
 
 	// initializes combo lock
@@ -27,11 +34,17 @@ public class ComboLock {
 			this.secret2 = secret2;
 		if (secret3 >= LOWER_LIMIT && secret3 <= UPPER_LIMIT)
 			this.secret3 = secret3;
+
+		this.reset();
 	}
 
 	// resets dial position to 0
 	public void reset() {
 		this.position = 0;
+
+		this.pin1 = false;
+		this.pin2 = false;
+		this.pin3 = false;
 	}
 
 	// turns dial to the right by number of ticks

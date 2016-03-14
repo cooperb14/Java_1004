@@ -1,10 +1,10 @@
 //*******************************
 //
 // Zip code class
-//
+// written by Cooper Bates (cbb2153)
 // This is a template from the zip code class supplied by assignment
-// class addressing Programming Project 8.3 of BigJava
 //
+// class addressing Programming Project 8.3 of BigJava
 //*******************************
 
 public class Zipcode {
@@ -12,48 +12,67 @@ public class Zipcode {
 	private String zipcode;
 	private String barcode;
 
+	private final int ZIP_LENGTH = 5;
+	private final int BAR_LENGTH = 32;
+
 	// construct a zip code given a numeric zip number
 	public Zipcode(int zip_number) {
 		String zip = Integer.toString(zip_number);
 
-		this.zipcode = zip;
+		// checks inputed zip code validity
+		if (valid_zip_length(zip)) {
+			this.zipcode = zip;
 
-		// determine check digit
-		int sum = 0;
-		for (int i = 0; i < zip.length(); i++) {
-			sum += (int) zip.charAt(i);
+			// determine check digit
+			int sum = 0;
+			for (int i = 0; i < zip.length(); i++) {
+				sum += Character.getNumericValue(zip.charAt(i));
+			}
+			int check_digit;
+			if (sum % 10 == 0)
+				check_digit = 0;
+			else
+				check_digit = 10 - (sum % 10);
+
+			// add check digit to zip code
+			zip += Integer.toString(check_digit);
+
+			// convert numbers to bar code
+			zip = Num2Bar(zip);
+
+			// add frame bars
+			zip = "|" + zip + "|";
+
+			this.barcode = zip;
+
+		} else {
+			this.zipcode = "Invalid zip code";
+			this.barcode = "Invalid zip code";
 		}
-		int check_digit = 10 - (sum % 10);
 
-		// add check digit to zip code
-		zip += Integer.toString(check_digit);
-
-		// convert numbers to bar code
-		zip = Num2Bar(zip);
-
-		// add frame bars
-		zip = "|" + zip + "|";
-
-		this.barcode = zip;
 	}
 
 	// construct zip code given a bar code
 	public Zipcode(String bar) {
-		this.barcode = bar;
-
-		// strip frame bars
-		String zip = bar.substring(1, bar.length() - 1);
-
-		// strip check digit
-		zip = zip.substring(0, zip.length() - 5);
-
-		// parse coded numbers and convert to integers
 		String result = "";
-		for (int i = 0; i < zip.length(); i += 5) {
-			result = result + Bar2Num(zip.substring(i, i + 5));
+
+		if (valid_bar_length(bar) && valid_bar(result)) {
+			// strip frame bars
+			String zip = bar.substring(1, bar.length() - 1);
+
+			// parse coded numbers and convert to integers
+			for (int i = 0; i < zip.length(); i += 5) {
+				result = result + Bar2Num(zip.substring(i, i + 5));
+			}
+
+			// remove check digit
+			this.zipcode = result.substring(0, result.length() - 1);
+			this.barcode = bar;
+		} else {
+			this.zipcode = "Invalid bar code";
+			this.barcode = "Invalid bar code";
 		}
 
-		this.zipcode = result;
 	}
 
 	// accessor method to retrieve numeric zip code
@@ -102,4 +121,30 @@ public class Zipcode {
 			return Integer.toString(sum);
 	}
 
-}
+	// method to check if zip code is proper length
+	private boolean valid_zip_length(String num) {
+		return (num.length() == ZIP_LENGTH);
+	}
+
+	// method to check if bar code is proper length
+	private boolean valid_bar_length(String bar) {
+		return (bar.length() == BAR_LENGTH);
+	}
+
+	// method to check the validity of bar code
+	private boolean valid_bar(String num) {
+
+		int sum = 0;
+		for (int i = 0; i < num.length(); i++) {
+			sum += Character.getNumericValue(num.charAt(i));
+		}
+
+		// check if check digit is correct
+		if (sum % 10 == 0)
+			return true;
+		else
+			return false;
+
+	}
+
+} // end of class
