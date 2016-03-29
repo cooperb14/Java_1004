@@ -127,7 +127,7 @@ public class Zipcode {
 	}
 
 	// method to check if bar code is proper length
-	private boolean valid_bar_length(String bar) {k
+	private boolean valid_bar_length(String bar) {
 		return (bar.length() == BAR_LENGTH);
 	}
 
