@@ -1,3 +1,11 @@
+
+/*////////////////////////////////////////////
+| Programming Project 4
+| written by Cooper Bates (cbb2153)
+|
+| This is file contains the Player Class
+*//////////////////////////////////////////////
+
 import java.util.ArrayList;
 
 public class Player {
@@ -19,8 +27,6 @@ public class Player {
 		// remove the card c from the player's hand
 		hand.remove(c);
 	}
-
-	// you will likely need more methods here ------------------------
 
 	// player sorts cards
 	public void sort_cards() {
@@ -49,29 +55,45 @@ public class Player {
 		int result = 0;
 		Card current, previous, next;
 
+		for (int i = 0; i < this.hand.size() - 1; i++) {
+			current = this.hand.get(i);
+			next = this.hand.get(i + 1);
+
+			if (current.compare_by_value(next) == 0) {
+				result++;
+			}
+		}
+
 		for (int i = 1; i < this.hand.size() - 1; i++) {
 			current = this.hand.get(i);
 			previous = this.hand.get(i - 1);
 			next = this.hand.get(i + 1);
 
-			if (current.compareTo(next) == 0
-				&& current.compareTo(previous) == 0) {
-				result += 2;
-			}
-			if (current.compareTo(next) == 0
-				|| current.compareTo(previous) == 0) {
-				result++;
+			if (current.compare_by_value(next) == 0) {
+				if (current.compare_by_value(previous) == 0) {
+					result++;
+				}
 			}
 		}
 
 		return result;
 	}
 
+	// checks if player's hand is a straight
 	public boolean check_for_straight() {
-		
+
 		int result = 0;
 		for (int i = 0; i < this.hand.size() - 1; i++) {
-			if(this.hand.get(i).is_sequential(this.hand.get(i+1))){
+			if (this.hand.get(i).is_sequential(this.hand.get(i + 1))) {
+				result++;
+			}
+		}
+
+		// account for special case of the Ace
+		Card ace = new Card(1, 1);
+		Card king = new Card(1, 13);
+		if (this.hand.get(0).compare_by_value(ace) == 0) {
+			if (this.hand.get(4).compare_by_value(king) == 0) {
 				result++;
 			}
 		}
@@ -83,6 +105,7 @@ public class Player {
 		}
 	}
 
+	// checks if player's hand is a flush
 	public boolean check_for_flush() {
 		int result = 0;
 
@@ -99,26 +122,17 @@ public class Player {
 		}
 
 	}
-	
-	public boolean check_for_royalflush(){
-		Card ace = new Card(1,1);
-		Card nine = new Card(1,9);
-		boolean result = true;
-		
-		if (this.hand.get(0).compare_by_value(ace) == 0 &&
-			this.hand.get(1).compare_by_value(nine) == 1  &&
-			this.check_for_flush()){
-				for (int i = 3; i < this.hand.size() - 1; i++) {
-					if(this.hand.get(i).is_sequential(this.hand.get(i+1))){
-						result = !result;
-					}
-				}
+
+	// checks if player's hand is a royal flush
+	public boolean check_for_royalflush() {
+
+		Card ace = new Card(1, 1);
+		if (this.check_for_straight() && this.check_for_flush()) {
+			if (this.hand.get(0).compare_by_value(ace) == 0) {
+				return true;
+			}
 		}
-		else{
-			result = false;
-		}
-		
-		return result;
+		return false;
 	}
 
 	// returns players hand
@@ -129,6 +143,11 @@ public class Player {
 			return this.hand;
 	}
 
+	// clears players current hand
+	public void clearHand() {
+		this.hand.clear();
+	}
+
 	// prints players hand
 	public String toString() {
 		String result = "";
@@ -137,5 +156,4 @@ public class Player {
 		}
 		return result;
 	}
-
 }
